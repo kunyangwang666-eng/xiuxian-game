@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>无限修仙模拟器</title>
+<style>
+body {
+    background: #0b0f1a;
+    color: #d4c7ff;
+    font-family: "Microsoft YaHei";
+    text-align: center;
+}
+#box {
+    width: 70%;
+    margin: auto;
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #3a2f5a;
+    background: #11162a;
+    border-radius: 10px;
+}
+button {
+    margin: 10px;
+    padding: 10px;
+    background: #2b1d4a;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background: #432a78;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌌 无限修仙模拟器</h1>
+
+<div id="box">
+    <div id="story">你的修仙之路开始了……</div>
+    <div id="options"></div>
+</div>
+
+<script>
+let state = {
+    cultivation: 0,
+    dao: 0,
+    demon: 0,
+    karma: 0
+};
+
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)] }
+
+function generateStory(){
+    let places = ["青云宗","幽冥山","凡尘城","天机阁","魔域边境","虚空裂缝"];
+    let text = "你来到 " + rand(places) + "，天地灵气涌动。";
+
+    let options = [
+        {t:"修炼突破", e:{cultivation:1}},
+        {t:"杀伐果断", e:{demon:1}},
+        {t:"参悟天道", e:{dao:1}},
+        {t:"行善积德", e:{karma:1}},
+        {t:"静观其变", e:{dao:1}},
+    ];
+
+    options.sort(()=>Math.random()-0.5);
+    return {text, options:options.slice(0,3)};
+}
+
+function apply(effect){
+    for(let k in effect){
+        state[k] += effect[k];
+    }
+}
+
+function update(){
+    let data = generateStory();
+    document.getElementById("story").innerText = data.text;
+
+    let box = document.getElementById("options");
+    box.innerHTML = "";
+
+    data.options.forEach(opt=>{
+        let btn = document.createElement("button");
+        btn.innerText = opt.t;
+        btn.onclick = function(){
+            apply(opt.e);
+            update();
+        };
+        box.appendChild(btn);
+    });
+}
+
+update();
+</script>
+
+</body>
+</html>
